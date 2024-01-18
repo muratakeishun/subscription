@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Command {
+public class InputCommand {
 
     static Scanner scanner = new Scanner(System.in);
 
@@ -23,14 +23,19 @@ public class Command {
             switch (nextAction) {
                 case 0:
                     System.out.println("終了いたします。");
+                    scanner.close();
                     break;
 
                 case 1:
+                    Indication.registerOutput();
                     break;
 
                 case 2:
                     detailsCommand();
-                    break;
+
+                default:
+                    ErrorMessage.errorMessage();
+                    summaryCommand();
             }
             break;
         }
@@ -47,32 +52,12 @@ public class Command {
         if (0 == nextAction) {
             System.out.println("一覧へ戻ります。");
             Indication.summaryOutput();
-        } else {
+        } else{
             System.out.println("id" + nextAction + "の詳細です。");
             Indication.detailOutput(nextAction);
+
         }
     }
-
-//    public static void deleteOrUpdate() {
-//        System.out.println("実行したい操作を選択してください。");
-//        System.out.println("コマンドは半角英数で入力してください。");
-//        System.out.println("0 : ID選択に戻る");
-//        System.out.println("1 : 削除");
-//
-//        //            入力された内容を格納
-//        int nextAction = scanner.nextInt();
-//
-////            コマンドに応じて処理を分ける
-//        switch (nextAction) {
-//            case 0:
-//                System.out.println("終了いたします。");
-
-//                detailsCommand();
-//            case 1:
-//                deleteCommand();
-//
-//        }
-//    }
 
     public static void deleteCommand(int i) {
 
@@ -87,5 +72,26 @@ public class Command {
             case 1:
                 SubscriptionList.deleteSubscriptionList(i);
         }
+    }
+
+    /*
+     *入力と登録するメソッド
+     */
+    public static void inputSubscriptionData() {
+        System.out.println("登録するデータを入力してください。");
+
+        System.out.println("サブスクの名前を入力してください。");
+        String name = scanner.next();
+
+        System.out.println("そのサブスクが年額料金なら1,月額料金なら2を入力してください。");
+        int type = scanner.nextInt();
+
+        System.out.println("そのサブスクの料金を入力してください。。");
+        int price = scanner.nextInt();
+
+        SubscriptionData newData = new SubscriptionData(name, type, price);
+        SubscriptionList.addList(newData);
+        SubscriptionList.writeFile();
+        System.out.println("登録されました。\n");
     }
 }

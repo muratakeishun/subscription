@@ -1,6 +1,6 @@
-public class Error {
+public class ErrorMessage {
 
-    public static void error(){
+    public static void errorMessage(){
 
         System.out.println("正しい内容を入力してください");
 

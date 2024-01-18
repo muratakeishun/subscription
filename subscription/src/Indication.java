@@ -1,3 +1,6 @@
+/*
+ *画面表示クラス
+ */
 public class Indication {
 
     static SubscriptionList list = new SubscriptionList();
@@ -9,11 +12,12 @@ public class Indication {
         int totalYear = 0;
 
 
-        if (SubscriptionList.subscriptionList == null || SubscriptionList.subscriptionList.isEmpty()) {
-            list.listMake();
+        if (SubscriptionList.list == null || SubscriptionList.list.isEmpty()) {
+            InputCommand.inputSubscriptionData();
         }
 
-        subscription_table_first_row.table_first_row();
+        subscriptionFirstRow.FirstRow();
+
 
 //        ループで回して実行
         for (SubscriptionData subscriptionData : list.getSubscriptionList()) {
@@ -32,32 +36,24 @@ public class Indication {
         }
         System.out.println("年の合計金額は" + totalYear + "です。");
 
-        Command.summaryCommand();
+        InputCommand.summaryCommand();
     }
 
     //    詳細画面表示メソッド
     public static void detailOutput(int nextAction) {
 
-//       1行目呼び出し
-        subscription_table_first_row.table_first_row();
+        if (SubscriptionList.selectSubscriptionList(nextAction) == null) {
+            System.out.println("条件に合致する要素は見つかりませんでした。");
+            summaryOutput();
+        }
+        //1行目呼び出し
+        subscriptionFirstRow.FirstRow();
+        System.out.println(SubscriptionList.selectSubscriptionList(nextAction).getRow());
+        InputCommand.deleteCommand(nextAction);
+    }
 
-        // 条件に合致する SubscriptionData オブジェクトを抽出
-//        SubscriptionData foundItem = null;
-//        for (SubscriptionData item : SubscriptionList.subscriptionList) {
-//            if (item.getId() == 1) { // IDが1の要素を探す
-//                foundItem = item;
-//                break; // 見つかったらループを抜ける
-//            }
-//        }
-
-//        if (foundItem != null) {
-//            System.out.println("条件に合致する要素が見つかりました: " + foundItem);
-//        } else {
-//            System.out.println("条件に合致する要素は見つかりませんでした。");
-//        }
-
-        list.selectSubscriptionList(nextAction - 1);
-
-        Command.deleteCommand(nextAction -1);
+    public static void registerOutput() {
+        InputCommand.inputSubscriptionData();
+        summaryOutput();
     }
 }

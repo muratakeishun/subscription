@@ -3,20 +3,31 @@ import java.util.HashMap;
 //SubscriptionDataクラス
 //クラスのインスタンスを配列に格納
 public class SubscriptionData {
-    int sbsc_id;
 
-    String sbsc_name;
+    // 次に設定するSubscriptionId
+    public static int nextId = 1;
 
-    int sbsc_type;
+    public int SubscriptionId;
 
-    int sbsc_price;
+    public String SubscriptionName;
+
+    public int SubscriptionType;
+
+    public int SubscriptionPrice;
 
     //コンストラクタ
     SubscriptionData(int id, String name, int type, int price) {
-        this.sbsc_id = id;
-        this.sbsc_name = name;
-        this.sbsc_type = type;
-        this.sbsc_price = price;
+        this.SubscriptionId = id;
+        this.SubscriptionName = name;
+        this.SubscriptionType = type;
+        this.SubscriptionPrice = price;
+    }
+
+    public SubscriptionData(String name, int type, int price) {
+        this.SubscriptionId = nextId++;
+        this.SubscriptionName = name;
+        this.SubscriptionType = type;
+        this.SubscriptionPrice = price;
     }
 
     //        情報を出力するメソッド
@@ -24,12 +35,12 @@ public class SubscriptionData {
 
         HashMap<Integer, String> subscriptionType = new HashMap<>();
 
-        if (sbsc_type == 1) {
-            subscriptionType.put(sbsc_type, "年");
-        } else if (sbsc_type == 2) {
-            subscriptionType.put(sbsc_type, "月");
+        if (SubscriptionType == 1) {
+            subscriptionType.put(SubscriptionType, "年");
+        } else if (SubscriptionType == 2) {
+            subscriptionType.put(SubscriptionType, "月");
         }
-        return "|" + sbsc_id + "|" + sbsc_name + "|" + subscriptionType.get(sbsc_type) + "|" + sbsc_price;
+        return "|" + SubscriptionId + "|" + SubscriptionName + "|" + subscriptionType.get(SubscriptionType) + "|" + SubscriptionPrice;
     }
 
     //        月の合計計算メソッド
@@ -37,11 +48,11 @@ public class SubscriptionData {
 
         int monthlyPrice;
 
-        if (sbsc_type == 1) {
+        if (SubscriptionType == 1) {
 //                        年を月に変換
-            monthlyPrice = sbsc_price / 12;
+            monthlyPrice = SubscriptionPrice / 12;
         } else {
-            monthlyPrice = sbsc_price;
+            monthlyPrice = SubscriptionPrice;
         }
         return monthlyPrice;
     }
@@ -51,28 +62,36 @@ public class SubscriptionData {
 
         int yearlyPrice;
 //      タイプ月を年に変換
-        if (sbsc_type == 2) {
-            yearlyPrice = sbsc_price * 12;
+        if (SubscriptionType == 2) {
+            yearlyPrice = SubscriptionPrice * 12;
         } else {
-            yearlyPrice = sbsc_price;
+            yearlyPrice = SubscriptionPrice;
         }
         return yearlyPrice;
     }
 
-    public static void countString(String str){
-        //戻り値
-        int ret = 0;
+//    public static void countString(String str) {
+//        //戻り値
+//        int ret = 0;
+//
+//        //全角半角判定
+//        char[] c = str.toCharArray();
+//        for (int i = 0; i < c.length; i++) {
+//            if (String.valueOf(c[i]).getBytes().length <= 1) {
+//                ret += 1; //半角文字なら＋１
+//            } else {
+//                ret += 2; //全角文字なら＋２
+//            }
+//        }
+//        System.out.println(ret);
+//    }
 
-        //全角半角判定
-        char[] c = str.toCharArray();
-        for(int i=0;i<c.length;i++) {
-            if(String.valueOf(c[i]).getBytes().length <= 1){
-                ret += 1; //半角文字なら＋１
-            }else{
-                ret += 2; //全角文字なら＋２
-            }
-        }
+    // サブスクIDを取得するメソッド
+    public int getSubscriptionId() {
+        return SubscriptionId;
+    }
 
-        System.out.println(ret);
+    public String convertToCSV() {
+        return SubscriptionId + "," + SubscriptionName + "," + SubscriptionType + "," + SubscriptionPrice;
     }
 }

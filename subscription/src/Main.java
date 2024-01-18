@@ -5,7 +5,8 @@ public class Main {
 
     //    一覧表示画面
     public static void main(String[] args) {
-        SubscriptionData.countString("あいうえおaB");
+        //csvファイルの読み込み
+        SubscriptionList.readFile();
         Indication.summaryOutput();
     }
 }
