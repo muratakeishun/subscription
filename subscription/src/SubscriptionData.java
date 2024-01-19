@@ -27,18 +27,22 @@ public class SubscriptionData {
         this.SubscriptionPrice = price;
     }
 
-    //        情報を出力するメソッド
-    public String getRow() {
-
-        HashMap<Integer, String> subscriptionType = new HashMap<>();
-
-        if (SubscriptionType == 1) {
-            subscriptionType.put(SubscriptionType, "年");
-        } else if (SubscriptionType == 2) {
-            subscriptionType.put(SubscriptionType, "月");
-        }
-        return "|" + SubscriptionId + "|" + SubscriptionName + "|" + subscriptionType.get(SubscriptionType) + "|" + SubscriptionPrice;
+    //情報を取ってくるメソッド
+    public String getRowFormatted(String format) {
+        return String.format(format, SubscriptionId, SubscriptionName, getSubscriptionTypeString(), SubscriptionPrice);
     }
+
+//    }    public String getRow() {
+//
+//        HashMap<Integer, String> subscriptionType = new HashMap<>();
+//
+//        if (SubscriptionType == 1) {
+//            subscriptionType.put(SubscriptionType, "年");
+//        } else if (SubscriptionType == 2) {
+//            subscriptionType.put(SubscriptionType, "月");
+//        }
+//        return "|" + SubscriptionId + "|" + SubscriptionName + "|" + subscriptionType.get(SubscriptionType) + "|" + SubscriptionPrice;
+//    }
 
     //        月の合計計算メソッド
     public int getMonthlyPrice() {
@@ -67,25 +71,27 @@ public class SubscriptionData {
         return yearlyPrice;
     }
 
-//    public static void countString(String str) {
-//        //戻り値
-//        int ret = 0;
-//
-//        //全角半角判定
-//        char[] c = str.toCharArray();
-//        for (int i = 0; i < c.length; i++) {
-//            if (String.valueOf(c[i]).getBytes().length <= 1) {
-//                ret += 1; //半角文字なら＋１
-//            } else {
-//                ret += 2; //全角文字なら＋２
-//            }
-//        }
-//        System.out.println(ret);
-//    }
-
     // サブスクIDを取得するメソッド
     public int getSubscriptionId() {
         return SubscriptionId;
+    }
+
+    public String getSubscriptionName() {
+        return SubscriptionName;
+    }
+
+    public String getSubscriptionTypeString() {
+        if (SubscriptionType == 1) {
+            return "年";
+        } else if (SubscriptionType == 2) {
+            return "月";
+        } else {
+            return "失敗です。削除してください";
+        }
+    }
+
+    public int getSubscriptionPrice() {
+        return SubscriptionPrice;
     }
 
     public String convertToCSV() {

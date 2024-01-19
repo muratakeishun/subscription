@@ -17,11 +17,6 @@ public class SubscriptionList {
 
     private static String filePath = "Resources/subscriptionList.csv";
 
-    static {
-        readFile();
-        nextId = calculateNextId();
-    }
-
     /*
      *CSV読み込み
      */
@@ -53,39 +48,6 @@ public class SubscriptionList {
             throw new RuntimeException(e);
         }
     }
-//    public static void readFile() {
-//        List<SubscriptionData> tempList = new ArrayList<>(); // 一時的なリストを作成
-//        list = new ArrayList<>();
-//        Path path = Paths.get(filePath);
-//
-//        //csvファイルの読み込み
-//        List<String> lines = null;
-//        try {
-//            lines = Files.readAllLines(path, StandardCharsets.UTF_8);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        for (String line : lines) {
-//            String[] data = line.split(",");
-//            if (data.length == 4) {
-//                try {
-//                    int subscriptionId = Integer.parseInt(data[0]);
-//                    String subscriptionName = data[1];
-//                    int subscriptionType = Integer.parseInt(data[2]);
-//                    int subscriptionPrice = Integer.parseInt(data[3]);
-//
-//                    //subscriptionDataに入れる
-//                    SubscriptionData subscriptionData = new SubscriptionData(subscriptionId, subscriptionName, subscriptionType, subscriptionPrice);
-//                    tempList.add(subscriptionData);
-//                    //addList(subscriptionData);
-//                } catch (NumberFormatException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-//            }
-//        }
-//        // ファイル読み込みが終わったら tempList の内容を list に追加
-//        list = new ArrayList<>(tempList);
-//    }
 
     /*
      *CSV書き込み, ソート
@@ -127,7 +89,7 @@ public class SubscriptionList {
     }
 
     /*
-     *
+     *listに追加するメソッド
      */
     public static void addList(SubscriptionData newData) {
         if (list == null) {

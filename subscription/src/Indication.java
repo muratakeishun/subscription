@@ -5,6 +5,12 @@ public class Indication {
 
     static SubscriptionList list = new SubscriptionList();
 
+    private static String firstRow= "サブスクID,サブスク名,サブスクタイプ,金額";
+    static int maxIdLength = 0;
+    static int maxNameLength = 0;
+    static int maxTypeLength = 0;
+    static int maxPriceLength = 0;
+
     //    一覧表示画面
     public static void summaryOutput() {
 
@@ -16,12 +22,25 @@ public class Indication {
             InputCommand.inputSubscriptionData();
         }
 
-        subscriptionFirstRow.FirstRow();
 
 
-//        ループで回して実行
+
         for (SubscriptionData subscriptionData : list.getSubscriptionList()) {
-            System.out.println(subscriptionData.getRow());
+            maxIdLength = Math.max(maxIdLength, String.valueOf(subscriptionData.getSubscriptionId()).length());
+            maxNameLength = Math.max(maxNameLength, subscriptionData.getSubscriptionName().length());
+            maxTypeLength = Math.max(maxTypeLength, subscriptionData.getSubscriptionTypeString().length());
+            maxPriceLength = Math.max(maxPriceLength, String.valueOf(subscriptionData.getSubscriptionPrice()).length());
+        }
+
+        // フォーマット文字列を作成
+        String format = "|%" + maxIdLength + "s|%" + maxNameLength + "s|%" + maxTypeLength + "s|%" + maxPriceLength + "s|";
+
+        // 1行目呼び出し
+        System.out.println(firstRow);
+
+        // ループで回して実行
+        for (SubscriptionData subscriptionData : list.getSubscriptionList()) {
+            System.out.println(subscriptionData.getRowFormatted(format));
         }
 
 //        月の合計値を算出
@@ -47,8 +66,8 @@ public class Indication {
             summaryOutput();
         }
         //1行目呼び出し
-        subscriptionFirstRow.FirstRow();
-        System.out.println(SubscriptionList.selectSubscriptionList(nextAction).getRow());
+        System.out.println(firstRow);
+        System.out.println(SubscriptionList.selectSubscriptionList(nextAction).getRowFormatted("%d|%s|%s|%d"));
         InputCommand.deleteCommand(nextAction);
     }
 

@@ -22,7 +22,9 @@ public class InputCommand {
             switch (nextAction) {
                 case 0:
                     System.out.println("終了いたします。");
-                    return;
+                    scanner.close();
+                    System.exit(0);
+                    break;
 
                 case 1:
                     Indication.registerOutput();
@@ -33,7 +35,7 @@ public class InputCommand {
                     break;
 
                 default:
-                    ErrorMessage.errorMessage();
+                    System.out.println("正しい内容を入力してください");
             }
         }
     }
