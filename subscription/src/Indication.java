@@ -5,26 +5,26 @@ public class Indication {
 
     static SubscriptionList list = new SubscriptionList();
 
-    private static String firstRow= "サブスクID,サブスク名,サブスクタイプ,金額";
+    private static String firstRow = "サブスクID,サブスク名,サブスクタイプ,金額";
     static int maxIdLength = 0;
     static int maxNameLength = 0;
     static int maxTypeLength = 0;
     static int maxPriceLength = 0;
 
-    //    一覧表示画面
+    /*
+     *一覧表示画面
+     */
     public static void summaryOutput() {
 
         int totalMonth = 0;
         int totalYear = 0;
 
-
+        //listの中身が空だったら登録画面に飛ばす
         if (SubscriptionList.list == null || SubscriptionList.list.isEmpty()) {
             InputCommand.inputSubscriptionData();
         }
 
-
-
-
+        //各値をとってきて文字列に変換、文字列の長さを算出
         for (SubscriptionData subscriptionData : list.getSubscriptionList()) {
             maxIdLength = Math.max(maxIdLength, String.valueOf(subscriptionData.getSubscriptionId()).length());
             maxNameLength = Math.max(maxNameLength, subscriptionData.getSubscriptionName().length());
@@ -58,7 +58,9 @@ public class Indication {
         InputCommand.summaryCommand();
     }
 
-    //    詳細画面表示メソッド
+    /*
+     *詳細画面表示メソッド
+     */
     public static void detailOutput(int nextAction) {
 
         if (SubscriptionList.selectSubscriptionList(nextAction) == null) {
@@ -71,6 +73,9 @@ public class Indication {
         InputCommand.deleteCommand(nextAction);
     }
 
+    /*
+     *登録画面出力
+     */
     public static void registerOutput() {
         InputCommand.inputSubscriptionData();
         summaryOutput();

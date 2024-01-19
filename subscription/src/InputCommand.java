@@ -1,10 +1,15 @@
 import java.util.Scanner;
 
+/*
+ *入力とそれに対応するコマンドのクラス
+ */
 public class InputCommand {
 
     static Scanner scanner = new Scanner(System.in);
 
-
+    /*
+     *一覧表示画面で使うコマンド
+     */
     public static void summaryCommand() {
         int nextAction;
 
@@ -40,6 +45,9 @@ public class InputCommand {
         }
     }
 
+    /*
+     *詳細画面で使うコマンド
+     */
     public static void detailsCommand() {
 
         System.out.println("詳細表示したいidを入力してください。");
@@ -50,13 +58,16 @@ public class InputCommand {
         if (0 == nextAction) {
             System.out.println("一覧へ戻ります。");
             Indication.summaryOutput();
-        } else{
+        } else {
             System.out.println("id" + nextAction + "の詳細です。");
             Indication.detailOutput(nextAction);
 
         }
     }
 
+    /*
+     *削除で使うコマンド
+     */
     public static void deleteCommand(int i) {
 
         System.out.println("本当に削除しますか？");

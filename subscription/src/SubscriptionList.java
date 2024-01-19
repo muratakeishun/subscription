@@ -103,11 +103,16 @@ public class SubscriptionList {
         list.add(newData);
     }
 
+    /*
+     *listをgetするメソッド
+     */
     public ArrayList<SubscriptionData> getSubscriptionList() {
         return list;
     }
 
-    //ID検索
+    /*
+     *ID検索
+     */
     public static SubscriptionData selectSubscriptionList(int nextAction) {
 
 //         条件に合致する SubscriptionData オブジェクトを抽出
@@ -122,6 +127,9 @@ public class SubscriptionList {
         return foundItem;
     }
 
+    /*
+     *削除と上書き
+     */
     public static void deleteSubscriptionList(int i) {
 
         // 条件に合致する要素を削除
@@ -132,22 +140,25 @@ public class SubscriptionList {
         Indication.summaryOutput();
     }
 
+    /*
+     *リストから削除されたIDに対する穴を埋める処理
+     */
     public static void fillGap() {
-        // リストから削除されたIDに対する穴を埋める処理を実装
         List<Integer> usedIds = new ArrayList<>();
         for (SubscriptionData data : list) {
             usedIds.add(data.SubscriptionId);
         }
-
         for (int i = 1; i < nextId; i++) {
             if (!usedIds.contains(i)) {
-                // 穴があれば穴を埋める
                 nextId = i;
                 return;
             }
         }
     }
 
+    /*
+     *最大値のID判定
+     */
     public static int calculateNextId() {
         int maxId = 0;
         for (SubscriptionData data : list) {
