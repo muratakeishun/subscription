@@ -4,8 +4,6 @@ import java.util.HashMap;
 //クラスのインスタンスを配列に格納
 public class SubscriptionData {
 
-    // 次に設定するSubscriptionId
-    public static int nextId = 1;
 
     public int SubscriptionId;
 
@@ -24,7 +22,6 @@ public class SubscriptionData {
     }
 
     public SubscriptionData(String name, int type, int price) {
-        this.SubscriptionId = nextId++;
         this.SubscriptionName = name;
         this.SubscriptionType = type;
         this.SubscriptionPrice = price;

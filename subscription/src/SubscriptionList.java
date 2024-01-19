@@ -11,46 +11,81 @@ import java.util.List;
 
 public class SubscriptionList {
 
+    public static int nextId;
+
     public static ArrayList<SubscriptionData> list;
 
     private static String filePath = "Resources/subscriptionList.csv";
+
+    static {
+        readFile();
+        nextId = calculateNextId();
+    }
 
     /*
      *CSV読み込み
      */
     public static void readFile() {
-        List<SubscriptionData> tempList = new ArrayList<>(); // 一時的なリストを作成
-//        list = new ArrayList<>();
+        list = new ArrayList<>(); // 初期化
         Path path = Paths.get(filePath);
 
-        //csvファイルの読み込み
-        List<String> lines = null;
         try {
-            lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+            for (String line : lines) {
+                String[] data = line.split(",");
+                if (data.length == 4) {
+                    try {
+                        int subscriptionId = Integer.parseInt(data[0]);
+                        String subscriptionName = data[1];
+                        int subscriptionType = Integer.parseInt(data[2]);
+                        int subscriptionPrice = Integer.parseInt(data[3]);
+
+                        //subscriptionDataに入れる
+                        SubscriptionData subscriptionData = new SubscriptionData(subscriptionId, subscriptionName, subscriptionType, subscriptionPrice);
+                        list.add(subscriptionData);
+                    } catch (NumberFormatException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        for (String line : lines) {
-            String[] data = line.split(",");
-            if (data.length == 4) {
-                try {
-                    int subscriptionId = Integer.parseInt(data[0]);
-                    String subscriptionName = data[1];
-                    int subscriptionType = Integer.parseInt(data[2]);
-                    int subscriptionPrice = Integer.parseInt(data[3]);
-
-                    //subscriptionDataに入れる
-                    SubscriptionData subscriptionData = new SubscriptionData(subscriptionId, subscriptionName, subscriptionType, subscriptionPrice);
-                    tempList.add(subscriptionData);
-//                    addList(subscriptionData);
-                } catch (NumberFormatException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
-        // ファイル読み込みが終わったら tempList の内容を list に追加
-        list = new ArrayList<>(tempList);
     }
+//    public static void readFile() {
+//        List<SubscriptionData> tempList = new ArrayList<>(); // 一時的なリストを作成
+//        list = new ArrayList<>();
+//        Path path = Paths.get(filePath);
+//
+//        //csvファイルの読み込み
+//        List<String> lines = null;
+//        try {
+//            lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        for (String line : lines) {
+//            String[] data = line.split(",");
+//            if (data.length == 4) {
+//                try {
+//                    int subscriptionId = Integer.parseInt(data[0]);
+//                    String subscriptionName = data[1];
+//                    int subscriptionType = Integer.parseInt(data[2]);
+//                    int subscriptionPrice = Integer.parseInt(data[3]);
+//
+//                    //subscriptionDataに入れる
+//                    SubscriptionData subscriptionData = new SubscriptionData(subscriptionId, subscriptionName, subscriptionType, subscriptionPrice);
+//                    tempList.add(subscriptionData);
+//                    //addList(subscriptionData);
+//                } catch (NumberFormatException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+//            }
+//        }
+//        // ファイル読み込みが終わったら tempList の内容を list に追加
+//        list = new ArrayList<>(tempList);
+//    }
 
     /*
      *CSV書き込み, ソート
@@ -59,7 +94,7 @@ public class SubscriptionList {
         Comparator<SubscriptionData> subscriptionDataComparator = new Comparator<SubscriptionData>() {
             @Override
             public int compare(SubscriptionData o1, SubscriptionData o2) {
-                return Integer.valueOf(o1.SubscriptionId).compareTo(Integer.valueOf(o2.SubscriptionId));
+                return Integer.compare(o1.SubscriptionId, o2.SubscriptionId);
             }
         };
         Collections.sort(list, subscriptionDataComparator);
@@ -98,6 +133,11 @@ public class SubscriptionList {
         if (list == null) {
             list = new ArrayList<>();
         }
+        nextId = calculateNextId();
+
+        //穴埋め処理を実行
+        fillGap();
+        newData.SubscriptionId = nextId++;
         list.add(newData);
     }
 
@@ -125,9 +165,32 @@ public class SubscriptionList {
         // 条件に合致する要素を削除
         list.removeIf(item -> item.getSubscriptionId() == i);
 
-        writeFile();
         System.out.println("削除しました。");
         writeFile();
         Indication.summaryOutput();
+    }
+
+    public static void fillGap() {
+        // リストから削除されたIDに対する穴を埋める処理を実装
+        List<Integer> usedIds = new ArrayList<>();
+        for (SubscriptionData data : list) {
+            usedIds.add(data.SubscriptionId);
+        }
+
+        for (int i = 1; i < nextId; i++) {
+            if (!usedIds.contains(i)) {
+                // 穴があれば穴を埋める
+                nextId = i;
+                return;
+            }
+        }
+    }
+
+    public static int calculateNextId() {
+        int maxId = 0;
+        for (SubscriptionData data : list) {
+            maxId = Math.max(maxId, data.SubscriptionId);
+        }
+        return maxId + 1;
     }
 }

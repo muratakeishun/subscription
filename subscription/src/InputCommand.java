@@ -6,9 +6,8 @@ public class InputCommand {
 
 
     public static void summaryCommand() {
+        int nextAction;
 
-
-//        ユーザーからが入力されるまで処理をループさせる
         while (true) {
             System.out.println("実行したい操作を選択してください。");
             System.out.println("コマンドは半角英数で入力してください。");
@@ -16,15 +15,14 @@ public class InputCommand {
             System.out.println("1 : 新規登録");
             System.out.println("2 : 詳細表示");
 
-            //            入力された内容を格納
-            int nextAction = scanner.nextInt();
+            // 入力された内容を格納
+            nextAction = scanner.nextInt();
 
-            //            コマンドに応じて処理を分ける
+            // コマンドに応じて処理を分ける
             switch (nextAction) {
                 case 0:
                     System.out.println("終了いたします。");
-                    scanner.close();
-                    break;
+                    return;
 
                 case 1:
                     Indication.registerOutput();
@@ -32,14 +30,12 @@ public class InputCommand {
 
                 case 2:
                     detailsCommand();
+                    break;
 
                 default:
                     ErrorMessage.errorMessage();
-                    summaryCommand();
             }
-            break;
         }
-        scanner.close();
     }
 
     public static void detailsCommand() {
